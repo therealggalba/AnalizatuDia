@@ -1,0 +1,1161 @@
+@import './styles/variables.scss';
+
+// Layout 100vh en Desktop / Auto-scroll en Móvil
+.appContainer {
+  height: 100vh;
+  min-height: 100vh;
+  // Gradiente "Aurora Alegre" que transmite positividad y confianza
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 20%, #fdf2f8 60%, #e0f2fe 100%);
+  color: $text-primary;
+  font-family: $font-family;
+  padding: 1.5rem;
+  padding-bottom: 110px; // Espaciado para el footer fijo
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  overflow: hidden; // Desktop no tiene scroll
+
+  @media (max-width: 1024px) {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto; // Habilita scroll vertical en móviles
+    overflow-x: hidden;
+    padding: 1rem;
+    padding-bottom: 130px; // Más espaciado en móvil para el footer
+    gap: 1rem;
+  }
+}
+
+// Navigation Header
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+
+  .leftSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .backBtn {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: $text-secondary;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: $transition-smooth;
+    box-shadow: 0 2px 5px rgba(148, 163, 184, 0.05);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: $text-primary;
+      transform: translateX(-3px);
+    }
+  }
+
+  .title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #075985 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+    }
+  }
+
+  .settingsBtn {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: $text-secondary;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition-smooth;
+    box-shadow: 0 2px 5px rgba(148, 163, 184, 0.05);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: $text-primary;
+      transform: rotate(30deg);
+    }
+
+    &.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #0369a1;
+    }
+  }
+}
+
+// Workspace Layout: Doble columna en PC / Columna única en móviles
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 1.5rem;
+  position: relative;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 1rem;
+  }
+}
+
+// Left side: Calendar Grid panel
+.calendarPanel {
+  @include glass-panel;
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  box-sizing: border-box;
+  min-height: 0;
+
+  @media (max-width: 1024px) {
+    height: auto;
+    min-height: 380px;
+  }
+
+  .calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+
+    .monthSelector {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
+        min-width: 140px;
+        text-align: center;
+        text-transform: capitalize;
+        color: #0f172a;
+      }
+
+      .navBtn {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        color: $text-secondary;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: $transition-smooth;
+        box-shadow: 0 2px 4px rgba(148,163,184,0.06);
+
+        &:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.9);
+          color: $text-primary;
+          transform: scale(1.08);
+        }
+
+        &:disabled {
+          opacity: 0.3;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    // Resumen del mes minimalista y alegre
+    .monthlySummaryWrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 0.35rem 0.75rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 4px rgba(148, 163, 184, 0.05);
+
+      .summaryLabel {
+        font-size: 0.75rem;
+        color: $text-secondary;
+        font-weight: 600;
+      }
+
+      .moodCircle {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        cursor: help;
+        transition: $transition-smooth;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  flex-shrink: 0;
+}
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  align-content: stretch;
+
+  @media (max-width: 1024px) {
+    grid-template-rows: repeat(5, 50px); // Tamaño fijo para móvil
+  }
+}
+
+.cellEmpty {
+  border-radius: 10px;
+}
+
+.cellDay {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: $transition-bounce;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(148,163,184,0.03);
+  overflow: hidden; // Contiene la onda líquida
+
+  .dayNumber {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $text-secondary;
+    z-index: 2;
+  }
+
+  .todayIndicator {
+    position: absolute;
+    top: 4px;
+    width: 4px;
+    height: 4px;
+    background: #0284c7;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #38bdf8;
+    z-index: 2;
+  }
+
+  // Pseudoelemento para la animación líquida (Liquid Fill)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 140%;
+    border-radius: 43%; // Forma irregular para simular líquido
+    background: linear-gradient(135deg, var(--orb-color), var(--orb-color-glow));
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    filter: blur(6px);
+    opacity: 0;
+    z-index: 1;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(255, 255, 255, 0.95);
+
+    .dayNumber {
+      color: #0f172a;
+    }
+
+    &::before {
+      transform: translate(-50%, -50%) scale(1) rotate(140deg);
+      opacity: 0.58; // Onda de color líquida más intensa y definida
+    }
+  }
+
+  &.selected {
+    background: rgba(14, 165, 233, 0.18);
+    border-color: rgba(14, 165, 233, 0.75);
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+
+    .dayNumber {
+      color: #0369a1;
+      font-weight: 800;
+    }
+  }
+
+  // Colores alegres y vivos (Fondo en reposo con más opacidad, onda líquida vibrante al hacer hover)
+  &.mood_muy-bueno {
+    --orb-color: #0ea5e9;
+    --orb-color-glow: #bae6fd;
+    border-color: rgba($mood-muy-bueno, 0.45);
+    background: rgba($mood-muy-bueno, 0.16);
+    .dayNumber { color: darken($mood-muy-bueno, 20%); }
+    &:hover { box-shadow: 0 0 8px rgba($mood-muy-bueno, 0.25); }
+  }
+
+  &.mood_bueno {
+    --orb-color: #10b981;
+    --orb-color-glow: #a7f3d0;
+    border-color: rgba($mood-bueno, 0.45);
+    background: rgba($mood-bueno, 0.16);
+    .dayNumber { color: darken($mood-bueno, 20%); }
+    &:hover { box-shadow: 0 0 8px rgba($mood-bueno, 0.25); }
+  }
+
+  &.mood_sin-mas {
+    --orb-color: #f59e0b;
+    --orb-color-glow: #fde68a;
+    border-color: rgba($mood-sin-mas, 0.45);
+    background: rgba($mood-sin-mas, 0.16);
+    .dayNumber { color: darken($mood-sin-mas, 20%); }
+    &:hover { box-shadow: 0 0 8px rgba($mood-sin-mas, 0.25); }
+  }
+
+  &.mood_aburrido {
+    --orb-color: #94a3b8;
+    --orb-color-glow: #e2e8f0;
+    border-color: rgba($mood-aburrido, 0.45);
+    background: rgba($mood-aburrido, 0.16);
+    .dayNumber { color: darken($mood-aburrido, 20%); }
+    &:hover { box-shadow: 0 0 8px rgba($mood-aburrido, 0.25); }
+  }
+
+  &.mood_malo {
+    --orb-color: #f43f5e;
+    --orb-color-glow: #fecdd3;
+    border-color: rgba($mood-malo, 0.45);
+    background: rgba($mood-malo, 0.16);
+    .dayNumber { color: darken($mood-malo, 15%); }
+    &:hover { box-shadow: 0 0 8px rgba($mood-malo, 0.25); }
+  }
+
+  &.mood_muy-malo {
+    --orb-color: #6366f1;
+    --orb-color-glow: #c7d2fe;
+    border-color: rgba($mood-muy-malo, 0.45);
+    background: rgba($mood-muy-malo, 0.16);
+    .dayNumber { color: darken($mood-muy-malo, 15%); }
+    &:hover { box-shadow: 0 0 8px rgba($mood-muy-malo, 0.25); }
+  }
+}
+
+// Right side panel: Day Form
+.detailPanel {
+  @include glass-panel;
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    height: auto;
+    min-height: 350px;
+  }
+
+  .panelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    padding-bottom: 0.5rem;
+    flex-shrink: 0;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+      color: #0f172a;
+    }
+
+    .dateLabel {
+      font-size: 0.75rem;
+      color: $text-secondary;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $text-secondary;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+}
+
+// Mood choices horizontal slider (Alineado en 1 sola fila)
+.moodSelectors {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+  }
+
+  .moodBtn {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    padding: 0.4rem 0.65rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row; // Elementos en fila horizontal dentro del botón
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    flex: 0 0 auto; // Evita que se encojan
+    transition: $transition-bounce;
+    box-shadow: 0 1px 3px rgba(148,163,184,0.03);
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    .name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: $text-secondary;
+      text-align: center;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.7);
+      border-color: rgba(255, 255, 255, 0.9);
+      .name { color: $text-primary; }
+    }
+
+    &.selected {
+      transform: scale(1.02);
+      .name {
+        color: #0f172a;
+        font-weight: 800;
+      }
+    }
+
+    &.muy-bueno {
+      .dot { background-color: $mood-muy-bueno; }
+      &.selected {
+        background: rgba($mood-muy-bueno, 0.15);
+        border-color: $mood-muy-bueno;
+        box-shadow: 0 0 10px rgba($mood-muy-bueno, 0.25);
+      }
+    }
+    &.bueno {
+      .dot { background-color: $mood-bueno; }
+      &.selected {
+        background: rgba($mood-bueno, 0.15);
+        border-color: $mood-bueno;
+        box-shadow: 0 0 10px rgba($mood-bueno, 0.25);
+      }
+    }
+    &.sin-mas {
+      .dot { background-color: $mood-sin-mas; }
+      &.selected {
+        background: rgba($mood-sin-mas, 0.15);
+        border-color: $mood-sin-mas;
+        box-shadow: 0 0 10px rgba($mood-sin-mas, 0.25);
+      }
+    }
+    &.aburrido {
+      .dot { background-color: $mood-aburrido; }
+      &.selected {
+        background: rgba($mood-aburrido, 0.15);
+        border-color: $mood-aburrido;
+        box-shadow: 0 0 10px rgba($mood-aburrido, 0.25);
+      }
+    }
+    &.malo {
+      .dot { background-color: $mood-malo; }
+      &.selected {
+        background: rgba($mood-malo, 0.15);
+        border-color: $mood-malo;
+        box-shadow: 0 0 10px rgba($mood-malo, 0.25);
+      }
+    }
+    &.muy-malo {
+      .dot { background-color: $mood-muy-malo; }
+      &.selected {
+        background: rgba($mood-muy-malo, 0.2);
+        border-color: $mood-muy-malo;
+        box-shadow: 0 0 10px rgba($mood-muy-malo, 0.3);
+      }
+    }
+  }
+}
+
+// Notes text field
+.noteArea {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  color: $text-primary;
+  padding: 0.7rem;
+  width: 100%;
+  min-height: 80px;
+  flex: 1;
+  resize: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  box-sizing: border-box;
+  outline: none;
+  transition: $transition-smooth;
+  box-shadow: inset 0 2px 4px rgba(148,163,184,0.03);
+
+  &:focus {
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.08);
+  }
+
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+// Buttons
+.saveBtn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border: none;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 10px rgba(3, 105, 161, 0.15);
+  transition: $transition-smooth;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(3, 105, 161, 0.2);
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// Settings Overlay (Floats absolutely over calendar/workspace)
+.settingsPanel {
+  @include glass-panel;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 40px rgba(148, 163, 184, 0.2), 0 0 15px rgba(56, 189, 248, 0.05);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 340px;
+  max-height: calc(100% - 20px);
+  overflow-y: auto;
+  z-index: 999;
+  animation: slideInDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 20px);
+    left: 10px;
+    right: 10px;
+  }
+
+  .settingsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 0.5rem;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+      color: #0f172a;
+    }
+
+    .closeSettingsBtn {
+      background: none;
+      border: none;
+      color: $text-muted;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.2rem;
+      border-radius: 50%;
+      transition: $transition-smooth;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.03);
+        color: $text-primary;
+      }
+    }
+  }
+
+  .fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .toggleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.01);
+    padding: 0.55rem 0.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 22px;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .slider {
+        background-color: #38bdf8;
+      }
+
+      &:checked + .slider:before {
+        transform: translateX(20px);
+      }
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.08);
+      transition: .2s;
+      border-radius: 22px;
+
+      &:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .2s;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .input {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    color: $text-primary;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+    outline: none;
+    transition: $transition-smooth;
+
+    &:focus {
+      border-color: rgba(56, 189, 248, 0.5);
+    }
+  }
+
+  .saveSettingsBtn {
+    background: #0284c7;
+    border: none;
+    color: white;
+    padding: 0.65rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(3, 105, 161, 0.1);
+    transition: $transition-smooth;
+
+    &:hover {
+      background: #0369a1;
+    }
+  }
+}
+
+// Fixed Footer for LLM Advice (Cozy light style)
+.llmFooter {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 95px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  z-index: 800;
+  box-sizing: border-box;
+  box-shadow: 0 -8px 25px rgba(148, 163, 184, 0.08);
+  animation: slideInUpFooter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (max-width: 1024px) {
+    position: relative; // Pasa a ser estático al final en móviles para no flotar tapando la pantalla apilada
+    height: auto;
+    min-height: 80px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: 0 4px 15px rgba(148, 163, 184, 0.05);
+    background: rgba(255,255,255,0.7);
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .footerSparkSection {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 170px;
+    flex-shrink: 0;
+
+    .iconSpark {
+      color: #0284c7;
+      animation: pulseSpark 2s infinite ease-in-out;
+    }
+
+    .footerLabel {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .footerContent {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #1e293b;
+    margin: 0 1.5rem;
+    font-style: italic;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    @media (max-width: 1024px) {
+      margin: 0.5rem 0;
+      -webkit-line-clamp: none; // Sin límite en móviles para lectura cómoda
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+  }
+
+  .footerHelperText {
+    font-size: 0.72rem;
+    color: $text-muted;
+    flex-shrink: 0;
+    font-weight: 600;
+
+    @media (max-width: 768px) {
+      align-self: flex-end;
+    }
+  }
+}
+
+// Proactive Toast Notification (Emergency/Push fin del día)
+.proactiveToast {
+  @include glass-panel;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 15px 35px rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
+  padding: 1rem;
+  position: fixed;
+  bottom: 105px;
+  right: 1.5rem;
+  width: 350px;
+  max-width: calc(100vw - 3rem);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  @media (max-width: 1024px) {
+    bottom: 20px; // Se posiciona más abajo si el footer ya no es fixed en móvil
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-width: none;
+  }
+
+  .toastHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .toastTitle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0284c7;
+    }
+
+    .closeBtn {
+      background: none;
+      border: none;
+      color: $text-muted;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.1rem;
+      border-radius: 50%;
+      transition: $transition-smooth;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.03);
+        color: $text-primary;
+      }
+    }
+  }
+
+  .toastBody {
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: #1e293b;
+    margin: 0;
+  }
+
+  .toastFooter {
+    font-size: 0.68rem;
+    color: $text-muted;
+    text-align: right;
+  }
+}
+
+.settingsDescription {
+  font-size: 0.72rem;
+  color: $text-secondary;
+  margin: -0.2rem 0 0.6rem 0;
+  line-height: 1.35;
+}
+
+.addColorSectionHeader {
+  margin-top: 0.8rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 0.8rem;
+  flex-shrink: 0;
+
+  h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin: 0;
+    color: #0f172a;
+  }
+}
+
+// Color Customizer List in Settings
+.colorConfigList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-height: 130px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  margin-bottom: 0.5rem;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.08);
+  }
+
+  .colorConfigItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    padding: 0.35rem 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(148,163,184,0.03);
+
+    .colorLabelGroup {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+
+      // Wrapper del selector de color interactivo
+      .colorPickerWrapper {
+        position: relative;
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+        flex-shrink: 0;
+
+        .inlineColorPicker {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          cursor: pointer;
+          z-index: 2;
+          border: none;
+          padding: 0;
+        }
+
+        .colorDotPreview {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          z-index: 1;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+      }
+
+      // Input para renombrar en el acto
+      .inlineColorNameInput {
+        background: transparent;
+        border: 1px solid transparent;
+        color: $text-primary;
+        font-size: 0.82rem;
+        font-weight: 700;
+        padding: 0.15rem 0.35rem;
+        border-radius: 6px;
+        flex: 1;
+        outline: none;
+        transition: $transition-smooth;
+        box-sizing: border-box;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.02);
+          border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:focus {
+          background: white;
+          border-color: rgba(56, 189, 248, 0.4);
+          box-shadow: 0 0 5px rgba(56, 189, 248, 0.05);
+        }
+      }
+    }
+
+    .deleteColorBtn {
+      background: none;
+      border: none;
+      color: rgba(239, 68, 68, 0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: $transition-smooth;
+
+      &:hover {
+        color: #ef4444;
+      }
+    }
+  }
+}
+
+.addColorForm {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+
+  .inputColorHex {
+    width: 36px;
+    padding: 0;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .inputName {
+    flex: 1;
+    font-size: 0.72rem;
+    padding: 0.3rem;
+  }
+
+  .addBtn {
+    background: rgba(2, 132, 199, 0.1);
+    border: 1px solid rgba(2, 132, 199, 0.25);
+    color: #0284c7;
+    border-radius: 6px;
+    padding: 0 0.5rem;
+    cursor: pointer;
+    font-size: 0.72rem;
+    transition: $transition-smooth;
+
+    &:hover {
+      background: #0284c7;
+      color: white;
+    }
+  }
+}
+
+// Loading States
+.loadingWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  // Gradiente equivalente para la carga
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 20%, #fdf2f8 60%, #e0f2fe 100%);
+  color: $text-secondary;
+  gap: 0.8rem;
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-top: 2px solid #0284c7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+// Keyframes
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseSpark {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes slideInDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInUpFooter {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes orbPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 4px var(--orb-color-glow);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 10px var(--orb-color-glow), 0 0 2px var(--orb-color);
+  }
+}
+

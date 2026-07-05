@@ -1,0 +1,49 @@
+// Brand and theme variables (Warm Light Theme for Confidence & Happiness)
+$bg-light-1: #fffbeb; // Crema cálido
+$bg-light-2: #fef3c7; // Melocotón suave
+$bg-light-3: #fdf2f8; // Violeta/Rosa pastel
+$bg-light-4: #f0f9ff; // Azul cielo suave
+
+$card-bg: rgba(255, 255, 255, 0.65);
+$card-border: rgba(255, 255, 255, 0.45);
+$card-glow: rgba(251, 191, 36, 0.05);
+
+$text-primary: #1e293b;
+$text-secondary: #475569;
+$text-muted: #64748b;
+
+// Fonts
+$font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+// Shadows and Transitions (Soft and cozy shadows, not dark)
+$shadow-premium: 0 10px 30px -5px rgba(148, 163, 184, 0.15), 0 4px 6px -2px rgba(148, 163, 184, 0.05);
+$transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// Mood Colors (Cheerful, Cozy and Vivid Palette)
+$mood-muy-bueno: #0ea5e9; // AZUL CIAN VIBRANTE
+$mood-bueno: #10b981;     // VERDE ESMERALDA ALEGRE
+$mood-sin-mas: #f59e0b;   // ÁMBAR / AMARILLO CÁLIDO
+$mood-aburrido: #94a3b8;  // GRIS PIZARRA VIVO
+$mood-malo: #f43f5e;      // ROSA INTENSO / CARMÍN EMPÁTICO
+$mood-muy-malo: #6366f1;  // ÍNDIGO VIVO RECONFORTANTE
+
+
+// Map of mood colors for dynamic utilities
+$mood-colors: (
+  "muy-bueno": $mood-muy-bueno,
+  "bueno": $mood-bueno,
+  "sin-mas": $mood-sin-mas,
+  "aburrido": $mood-aburrido,
+  "malo": $mood-malo,
+  "muy-malo": $mood-muy-malo
+);
+
+// Glassmorphism mixin
+@mixin glass-panel {
+  background: $card-bg;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $card-border;
+  box-shadow: $shadow-premium;
+}
